@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             number = "";
             s = "";
         }
-        if ( !number.endsWith(")") ) s = s.substring(0, (strRes.length() - 1));
+        if ( !number.endsWith(")") & !s.isEmpty() ) s = s.substring(0, (strRes.length() - 1));
         return s;
     }
 }
