@@ -154,6 +154,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if ( !number.endsWith(")") ) {
                 s = s.substring(0, s.length()-number.length() );
                 number = "(-" + number + ")";
+            } else if ( s.equals(number) ) { // if there is only ONE number in the string s
+                s = "";
+                number = number.substring( 2, (number.length() - 1) );
             } else {
                 s = s.substring(0, s.length()-number.length()+2 );
                 number = number.substring( 2, (number.length() - 1) );
