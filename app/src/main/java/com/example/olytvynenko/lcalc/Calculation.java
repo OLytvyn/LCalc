@@ -41,7 +41,7 @@ public class Calculation {
             dDouble[i] = Double.parseDouble(sDouble);
             if ( i < iSignsLength ) {
                 sSign[i] = Character.toString(strSource.charAt(iSigns[i]));
-                if ( sSign[i].equals("*") | sSign[i].equals("/") ) {
+                if ( sSign[i].equals("×") | sSign[i].equals("/") ) {
                     iPriority[i] = 2;
                 } else if ( sSign[i].equals("+") | sSign[i].equals("-") ) {
                     iPriority[i] = 3;
@@ -55,7 +55,7 @@ public class Calculation {
         for ( int i  = 0; i < iSignsLength; i++ ) {
             if ( iPriority[i] == 2 ) {
                 switch ( sSign[i] ) {
-                    case "*" :
+                    case "×" :
                         result = dDouble[i] * dDouble[i + 1];
                         dDouble[i + 1] = result;
                         dDouble[i] = 0;
@@ -96,11 +96,11 @@ public class Calculation {
     public String doCalc ( List<Double> numbers, List<String> actions ) {
         double result = 0;
         for ( int i  = 0; i < actions.size(); i++ ) {
-            if (actions.get(i).equals("*") | actions.get(i).equals("/")) {
+            if (actions.get(i).equals("×") | actions.get(i).equals("÷")) {
                 result = doAction(numbers.get(i), numbers.get(i + 1), actions.get(i));
                 numbers.set(i, 0.0d);
                 numbers.set(i + 1, result);
-                if (i == 0) { // if 1st action is "*" OR "/" -> i-1 = -1 <- index doesn't exist
+                if (i == 0) { // if 1st action is "×" OR "÷" -> i-1 = -1 <- index doesn't exist
                     actions.set(i, "+");
                 } else {
                     actions.set(i, actions.get(i - 1));
@@ -123,10 +123,10 @@ public class Calculation {
             case "-" :
                 result = numberOne - numberTwo;
                 break;
-            case "*" :
+            case "×" :
                 result = numberOne * numberTwo;
                 break;
-            case "/" :
+            case "÷" :
                 result = numberOne / numberTwo;
                 break;
         }

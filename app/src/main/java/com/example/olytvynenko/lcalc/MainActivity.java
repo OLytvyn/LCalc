@@ -1,5 +1,6 @@
 package com.example.olytvynenko.lcalc;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -14,8 +15,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().hide();
-
+        if (getResources().getConfiguration().orientation
+                == Configuration.ORIENTATION_LANDSCAPE) {
+            getSupportActionBar().hide();
+        }
         tvResult = (TextView) findViewById(R.id.tvResult);
         tvResult.setText("0");
 
@@ -85,10 +88,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 strRes = doString('-', strRes);
                 break;
             case R.id.btnMulti:
-                strRes = doString('*', strRes);
+                strRes = doString('×', strRes);
                 break;
             case R.id.btnDivide:
-                strRes = doString('/', strRes);
+                strRes = doString('÷', strRes);
                 break;
             case R.id.btnEquals:
                 if ( Character.isDigit(strRes.charAt(strRes.length()-1)) | strRes.endsWith(")") || strRes.endsWith(".") ) {
@@ -141,8 +144,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         }
-        if ( !s.isEmpty() & !s.endsWith("+") & !s.endsWith("-") & !s.endsWith("*") & !s.endsWith("/") & //debug "-" in the start of the string
-                (c == '+' || c == '-' || c == '*' || c == '/') ) {
+        if ( !s.isEmpty() & !s.endsWith("+") & !s.endsWith("-") & !s.endsWith("×") & !s.endsWith("÷") & //debug "-" in the start of the string
+                (c == '+' || c == '-' || c == '*' || c == '÷') ) {
             actions.add(Character.toString(c));
             if ( !number.isEmpty() ) {
                 numbers.add(doNumber(number));
@@ -182,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private String deleteCharacter( String s ) { // DEBUG - deleting one character number after deleting previous operation sign ( (1-)+5-
-        if ( s.length() > 1 & s.endsWith("-") || s.endsWith("+") || s.endsWith("*") || s.endsWith("/") ) { // apply count of parentheses in the future
+        if ( s.length() > 1 & s.endsWith("-") || s.endsWith("+") || s.endsWith("×") || s.endsWith("÷") ) { // apply count of parentheses in the future
             actions.remove(actions.size() - 1);
             if ( number.isEmpty() & numbers.size() > 0 ) { // number.isEmpty()
                 number = numbers.get(numbers.size() - 1).toString(); // Double 12.0 -> String "12.0"
