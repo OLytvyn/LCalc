@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name" translatable="false">LCalc</string>
+    <string name="btnCancel" translatable="false">C</string>
+    <string name="btnParentheses" translatable="false">( )</string>
+    <string name="btnBackspace" translatable="false">\u232B</string>
+    <string name="btnSignCh" translatable="false">±</string>
+    <string name="btnPlus" translatable="false">+</string>
+    <string name="btnMinus" translatable="false">-</string>
+    <string name="btnMulti" translatable="false">\u00d7</string>
+    <string name="btnDivide" translatable="false">\u00F7</string>
+    <string name="btnEquals" translatable="false">=</string>
+    <string name="btnDecimalSeparator">.</string>
+    <string name="btn0">zero</string>
+    <string name="btn1">one</string>
+    <string name="btn2">two</string>
+    <string name="btn3">three</string>
+    <string name="btn4">four</string>
+    <string name="btn5">five</string>
+    <string name="btn6">six</string>
+    <string name="btn7">seven</string>
+    <string name="btn8">eight</string>
+    <string name="btn9">nine</string>
+</resources>

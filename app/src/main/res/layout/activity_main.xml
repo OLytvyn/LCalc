@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    tools:context="com.example.olytvynenko.lcalc.MainActivity">
+    <LinearLayout
+        android:id="@+id/linLoutResult"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+        <TextView
+            android:id="@+id/tvResult"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linLoutButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+        <LinearLayout
+            android:id="@+id/linLoutBtn1Col"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:text="@string/btnCancel"
+                android:textAllCaps="true"
+                android:theme="@style/AppThemeColorButtonNormalBlue" />
+
+            <Button
+                android:id="@+id/btn7"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btn7"
+                android:textAllCaps="true"
+                android:theme="@style/AppThemeColorButtonNormalYellow" />
+
+            <Button
+                android:id="@+id/btn4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btn4" />
+
+            <Button
+                android:id="@+id/btn1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btn1" />
+
+            <Button
+                android:id="@+id/btnDecimalSeparator"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btnDecimalSeparator" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linLoutBtn2Col"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/btnBackspace"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btnBackspace" />
+            <Button
+                android:id="@+id/btn8"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btn8" />
+            <Button
+                android:id="@+id/btn5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btn5" />
+            <Button
+                android:id="@+id/btn2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btn2" />
+            <Button
+                android:id="@+id/btn0"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btn0" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linLoutBtn3Col"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/btnParentheses"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btnParentheses" />
+            <Button
+                android:id="@+id/btn9"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btn9" />
+            <Button
+                android:id="@+id/btn6"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btn6" />
+            <Button
+                android:id="@+id/btn3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btn3" />
+            <Button
+                android:id="@+id/btnSignCh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btnSignCh" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linLoutBtn4Col"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/btnDivide"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btnDivide"
+                android:theme="@style/AppThemeColorButtonNormalBlue" />
+            <Button
+                android:id="@+id/btnMulti"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btnMulti"
+                android:theme="@style/AppThemeColorButtonNormalYellow" />
+            <Button
+                android:id="@+id/btnMinus"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btnMinus" />
+            <Button
+                android:id="@+id/btnPlus"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btnPlus" />
+            <Button
+                android:id="@+id/btnEquals"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btnEquals" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
