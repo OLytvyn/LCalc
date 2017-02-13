@@ -41,7 +41,7 @@ public class Calculation {
             dDouble[i] = Double.parseDouble(sDouble);
             if ( i < iSignsLength ) {
                 sSign[i] = Character.toString(strSource.charAt(iSigns[i]));
-                if ( sSign[i].equals("×") | sSign[i].equals("/") ) {
+                if ( sSign[i].equals("×") | sSign[i].equals("÷") ) {
                     iPriority[i] = 2;
                 } else if ( sSign[i].equals("+") | sSign[i].equals("-") ) {
                     iPriority[i] = 3;
@@ -65,7 +65,7 @@ public class Calculation {
                             sSign[i] = sSign[i - 1];
                         }
                         break;
-                    case "/" :
+                    case "÷" :
                         result = dDouble[i] / dDouble[i + 1];
                         dDouble[i + 1] = result;
                         dDouble[i] = 0;

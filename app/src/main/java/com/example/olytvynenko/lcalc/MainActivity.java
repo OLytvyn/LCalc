@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         if ( !s.isEmpty() & !s.endsWith("+") & !s.endsWith("-") & !s.endsWith("×") & !s.endsWith("÷") & //debug "-" in the start of the string
-                (c == '+' || c == '-' || c == '*' || c == '÷') ) {
+                (c == '+' || c == '-' || c == '×' || c == '÷') ) {
             actions.add(Character.toString(c));
             if ( !number.isEmpty() ) {
                 numbers.add(doNumber(number));
