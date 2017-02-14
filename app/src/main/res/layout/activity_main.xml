@@ -110,10 +110,10 @@
             android:layout_weight="1"
             android:orientation="vertical">
             <Button
-                android:id="@+id/btnParentheses"
+                android:id="@+id/btnPercent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="@string/btnParentheses" />
+                android:text="@string/btnPercent" />
             <Button
                 android:id="@+id/btn9"
                 android:layout_width="match_parent"

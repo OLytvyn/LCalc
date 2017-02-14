@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name" translatable="false">LCalc</string>
     <string name="btnCancel" translatable="false">C</string>
-    <string name="btnParentheses" translatable="false">( )</string>
     <string name="btnBackspace" translatable="false">\u232B</string>
+    <string name="btnPercent" translatable="false">%</string>
     <string name="btnSignCh" translatable="false">±</string>
     <string name="btnPlus" translatable="false">+</string>
     <string name="btnMinus" translatable="false">-</string>

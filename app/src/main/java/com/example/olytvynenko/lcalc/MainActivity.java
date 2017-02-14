@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvResult.setText("0");
 
         findViewById(R.id.btnCancel).setOnClickListener(this);
-        findViewById(R.id.btnParentheses).setOnClickListener(this);
+        findViewById(R.id.btnPercent).setOnClickListener(this);
         findViewById(R.id.btnBackspace).setOnClickListener(this);
         findViewById(R.id.btnDivide).setOnClickListener(this);
         findViewById(R.id.btn7).setOnClickListener(this);
@@ -119,6 +119,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     strRes = doString( '\u00B1' , strRes);
                 }
                 break;
+            case R.id.btnPercent: // number% from numbers.get(numbers.size()-1)
+                if ( !numbers.isEmpty() & !number.isEmpty() & !number.endsWith(")") ) {
+                    strRes = strRes.substring(0, strRes.length()-number.length());
+                    number = doPercent(number);
+                    strRes = strRes + number;
+                }
+                break;
         }
         if ( strRes.isEmpty() ) {
             tvResult.setText("0");
@@ -182,6 +189,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             d = Double.parseDouble(s);
         }
         return d;
+    }
+
+    private String doPercent (String s ) {
+        double d;
+        d = numbers.get(numbers.size() - 1) * doNumber(s) / 100;
+        return String.valueOf(d);
     }
 
     private String deleteCharacter( String s ) { // DEBUG - deleting one character number after deleting previous operation sign ( (1-)+5-
