@@ -94,7 +94,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 strRes = doString('÷', strRes);
                 break;
             case R.id.btnEquals:
-                if ( Character.isDigit(strRes.charAt(strRes.length()-1)) | strRes.endsWith(")") || strRes.endsWith(".") ) {
+                if ( !strRes.isEmpty() && Character.isDigit(strRes.charAt(strRes.length()-1))
+                        | strRes.endsWith(")") || strRes.endsWith(".") ) {
                     if ( !number.isEmpty() ) numbers.add( doNumber(number) );
                     Calculation calculation = new Calculation();
                     strRes = calculation.doCalc(numbers, actions); // numbers.size() should be equals (actions.size()+1)
@@ -123,7 +124,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if ( !numbers.isEmpty() & !number.isEmpty() & !number.endsWith(")") ) {
                     strRes = strRes.substring(0, strRes.length()-number.length());
                     number = doPercent(number);
-                    strRes = strRes + number;
+                    if ( "×".equals( actions.get(actions.size()-1) ) ) { // if "×" -> do just (only) percents from previous number
+                        strRes = number;
+                    } else { // previous number(or string) "+" or "-" do percents from previous number - "tips" or "discounts"
+                        strRes = strRes + number;
+                    }
                 }
                 break;
         }

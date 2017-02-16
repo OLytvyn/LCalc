@@ -68,3 +68,8 @@ gradle-app.setting
 # *.iml
 out
 gen
+
+# ignore device*.png - screenshots
+device*.png
+*feature-graphi*.png
+web_hi_res_512.png
