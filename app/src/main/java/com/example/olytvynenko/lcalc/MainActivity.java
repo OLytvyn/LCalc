@@ -125,6 +125,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     strRes = strRes.substring(0, strRes.length()-number.length());
                     number = doPercent(number);
                     if ( "×".equals( actions.get(actions.size()-1) ) ) { // if "×" -> do just (only) percents from previous number
+                        numbers.remove(numbers.size()-1);
+                        actions.remove(actions.size()-1);
                         strRes = number;
                     } else { // previous number(or string) "+" or "-" do percents from previous number - "tips" or "discounts"
                         strRes = strRes + number;
