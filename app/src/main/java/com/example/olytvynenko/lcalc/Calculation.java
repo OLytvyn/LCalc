@@ -100,11 +100,7 @@ public class Calculation {
                 result = doAction(numbers.get(i), numbers.get(i + 1), actions.get(i));
                 numbers.set(i, 0.0d);
                 numbers.set(i + 1, result);
-                if (i == 0) { // if 1st action is "×" OR "÷" -> i-1 = -1 <- index doesn't exist
-                    actions.set(i, "+");
-                } else {
-                    actions.set(i, actions.get(i - 1));
-                }
+                actions.set( i, i==0 ? "+" : actions.get(i - 1));// if 1st action is "×" OR "÷" -> i-1 = -1 <- index doesn't exist
             }
         }
         for ( int i = 0; i < actions.size(); i++ ) {

@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="btnDecimalSeparator">,</string>
-    <string name="btn0">нуль</string>
+    <string name="btn0">ноль</string>
     <string name="btn1">один</string>
     <string name="btn2">два</string>
     <string name="btn3">три</string>
-    <string name="btn4">чотири</string>
-    <string name="btn5">п\'ять</string>
-    <string name="btn6">шість</string>
-    <string name="btn7">сім</string>
-    <string name="btn8">вісім</string>
-    <string name="btn9">дев\'ять</string>
+    <string name="btn4">четыре</string>
+    <string name="btn5">пять</string>
+    <string name="btn6">шесть</string>
+    <string name="btn7">семь</string>
+    <string name="btn8">восемь</string>
+    <string name="btn9">девять</string>
+    <string name="div_zero">Деление на ноль невозможно!</string>
 </resources>

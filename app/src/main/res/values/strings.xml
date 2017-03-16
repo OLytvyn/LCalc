@@ -20,4 +20,5 @@
     <string name="btn7">seven</string>
     <string name="btn8">eight</string>
     <string name="btn9">nine</string>
+    <string name="div_zero">You can\'t divide by zero!</string>
 </resources>

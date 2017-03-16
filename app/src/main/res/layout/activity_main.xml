@@ -5,23 +5,24 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:paddingBottom="16dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="16dp"
-    tools:context="com.example.olytvynenko.lcalc.MainActivity">
+    tools:context="com.example.olytvynenko.lcalc.MainActivity"
+    android:orientation="vertical">
     <LinearLayout
         android:id="@+id/linLoutResult"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="horizontal"
         android:layout_weight="1">
+
         <TextView
             android:id="@+id/tvResult"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="start"
+            android:textAlignment="textEnd"
             android:textSize="24sp" />
     </LinearLayout>
 

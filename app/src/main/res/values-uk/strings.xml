@@ -11,4 +11,5 @@
     <string name="btn7">сім</string>
     <string name="btn8">вісім</string>
     <string name="btn9">дев\'ять</string>
+    <string name="div_zero">Ділення на нуль неможливе!</string>
 </resources>

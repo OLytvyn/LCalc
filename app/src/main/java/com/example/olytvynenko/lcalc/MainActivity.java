@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,77 +101,82 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Calculation calculation = new Calculation();
                     strRes = calculation.doCalc(numbers, actions); // numbers.size() should be equals (actions.size()+1)
                     listsClear();
-                    if ( strRes.startsWith("-") ) strRes = "(" + strRes + ")"; // negative number is always inside parentheses
-                    number = strRes;
+                    strRes = doSimpleAndOrNegative(strRes);
+                    if ( strRes.matches(".*nfinit.*") || strRes.matches("NaN") ) { // division by zero exception Infinity | NaN
+                        strRes = "";
+                        Toast.makeText(this, getString(R.string.div_zero), Toast.LENGTH_SHORT).show();
+                    }
+                    tvResult.setText(strRes.isEmpty() ? "0" : strRes);
+                    clearStrResAndNumber();
+                    return;
                 }
                 break;
             case R.id.btnCancel:
-                strRes = "";
-                number = "";
+                clearStrResAndNumber();
                 break;
             case R.id.btnBackspace:
-                if ( !strRes.isEmpty() ) {
-                    strRes = deleteCharacter( strRes );
-                } else {
-                    listsClear();
-                }
+                if ( !strRes.isEmpty() ) strRes = deleteCharacter( strRes );
                 break;
             case R.id.btnSignCh:
-                if ( !number.isEmpty() ) {
-                    strRes = doString( '\u00B1' , strRes);
-                }
+                if ( !number.isEmpty() ) strRes = doString( '\u00B1' , strRes);
                 break;
             case R.id.btnPercent: // number% from numbers.get(numbers.size()-1)
                 if ( !numbers.isEmpty() & !number.isEmpty() & !number.endsWith(")") ) {
                     strRes = strRes.substring(0, strRes.length()-number.length());
                     number = doPercent(number);
+                    if ( number.startsWith("-") ) number = "(" + number + ")";
                     if ( "×".equals( actions.get(actions.size()-1) ) ) { // if "×" -> do just (only) percents from previous number
+                        int strResCoeff = numbers.get(numbers.size()-1) > 0 ? 1 : -1;//if numbers.get(numbers.size()-1) is positive "1" : "-1"
+                        strRes = strRes.substring(0, (strRes.length() - numbers.get(numbers.size()-1).toString().length() + strResCoeff));
                         numbers.remove(numbers.size()-1);
                         actions.remove(actions.size()-1);
-                        strRes = number;
+                        strRes = strRes + number;
                     } else { // previous number(or string) "+" or "-" do percents from previous number - "tips" or "discounts"
                         strRes = strRes + number;
                     }
                 }
                 break;
         }
-        if ( strRes.isEmpty() ) {
-            tvResult.setText("0");
-        } else {
-            tvResult.setText(strRes);
-        }
+        tvResult.setText(strRes.isEmpty() ? "0" : strRes);
     }
 
+    private static final String REGEXD = "^[(-]?[0-9]*\\)?\\.?[0-9]*\\)?([eE][+-]?[0-9]*)?$";
     private List<Double> numbers = new ArrayList<>();
     private List<String> actions = new ArrayList<>();
     private String number = "";
     private String doString(char c, String s) {
         if ( strRes.isEmpty() ) listsClear();
-        if ( Character.isDigit(c) | c == '.' ) { // condition for the doing number
-            RegexMatches rm = new RegexMatches();
-            if ( rm.isDouble(number + Character.toString(c)) ) {
+        // condition for the doing number -- method makeNumber
+        if ( Character.isDigit(c) | c == '.' ) {
+            if ( (number + Character.toString(c)).matches(REGEXD) ) {
                 if ( number.isEmpty() & c == '.' ) {
                     number =  "0.";
                     s = s + "0.";
+                } else if ( number.equals("0") & Character.isDigit(c)) {// prevent "00" or "02" condition
+                    return s;
                 } else {
                     number = number + Character.toString(c);
                     s = s + Character.toString(c);
                 }
             }
         }
-        if ( !s.isEmpty() & !s.endsWith("+") & !s.endsWith("-") & !s.endsWith("×") & !s.endsWith("÷") & //debug "-" in the start of the string
+        // add action -- method addActionAndNumber
+        if ( !number.isEmpty() & !s.isEmpty() &
+                !s.endsWith("+") & !s.endsWith("-") & !s.endsWith("×") & !s.endsWith("÷") &
                 (c == '+' || c == '-' || c == '×' || c == '÷') ) {
             actions.add(Character.toString(c));
-            if ( !number.isEmpty() ) {
-                numbers.add(doNumber(number));
-                number = "";
-            }
+            numbers.add(doNumber(number));
+            number = "";
             s = s + Character.toString(c);
         }
-        if ( c == '\u00B1' & !number.isEmpty() ) { // debug this if statement ( (-3)+(-5)+100, <- 100, +, chSign of (-5) - OK!!!
+        // sign change -- method changeSign
+        if ( c == '\u00B1' & !number.isEmpty() ) { // debug this if statement ( (-3)+(-5)+100, <- 100, +, chSign of (-5)
             if ( !number.endsWith(")") ) {
-                s = s.substring(0, s.length()-number.length() );
+                s = s.substring(0, s.length() - number.length());
                 number = "(-" + number + ")";
+            } else if ( number.endsWith(")") ) {
+                s = s.substring(0, s.length() - number.length());
+                number = number.substring(2, number.length()-1);
             } else if ( s.equals(number) ) { // if there is only ONE number in the string s
                 s = "";
                 number = number.substring( 2, (number.length() - 1) );
@@ -188,32 +194,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         actions.clear();
     }
 
-    private double doNumber ( String s ) {
+    private double doNumber ( String s ) { //String -> double; delete parentheses near the negative number
         double d;
-        if ( Character.toString(s.charAt(0)).equals("(") && Character.toString(s.charAt(1)).equals("-") ) { //delete parentheses near the negative number
-            d = Double.parseDouble(s.substring(1, s.length()-1));
-        } else {
-            d = Double.parseDouble(s);
-        }
+        d = Double.parseDouble( s.startsWith("(-") ? s.substring(1, s.length()-1) : s );
         return d;
     }
 
-    private String doPercent (String s ) {
+    private String doPercent ( String s ) {
         double d;
         d = numbers.get(numbers.size() - 1) * doNumber(s) / 100;
         return String.valueOf(d);
     }
 
-    private String deleteCharacter( String s ) { // DEBUG - deleting one character number after deleting previous operation sign ( (1-)+5-
-        if ( s.length() > 1 & s.endsWith("-") || s.endsWith("+") || s.endsWith("×") || s.endsWith("÷") ) { // apply count of parentheses in the future
+    private String deleteCharacter( String s ) {
+        if ( s.length() > 1 & ( s.endsWith("-") || s.endsWith("+") || s.endsWith("×") || s.endsWith("÷") ) ) { // apply count of parentheses in the future
             actions.remove(actions.size() - 1);
             if ( number.isEmpty() & numbers.size() > 0 ) { // number.isEmpty()
-                number = numbers.get(numbers.size() - 1).toString(); // Double 12.0 -> String "12.0"
-                if (number.startsWith("-"))
-                    number = "(" + number + ")"; // negative number is always inside parentheses
-                if (number.endsWith("0") & number.charAt(number.length() - 2) == '.') {
-                    number = number.substring(0, number.length() - 2);
-                }
+                number = numbers.get(numbers.size() - 1).toString(); // Double -12.0 -> String "-12.0"
+                number = doSimpleAndOrNegative(number); // -> String "(-12.0)"
                 numbers.remove(numbers.size() - 1);
             }
         } else {  // s ends with number OR point OR parentheses
@@ -222,19 +220,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else if ( number.length() == 1 ) { // delete whole number -> number=""
                 number = "";
             } else if ( number.isEmpty() & numbers.size() > 0 ) { // number.isEmpty()
-                number = numbers.get(numbers.size() - 1).toString(); // Double 12.0 -> String "12.0"
-                if ( number.startsWith("-") ) number = "(" + number + ")"; // negative number is always inside parentheses
-                if (number.endsWith("0") & number.charAt(number.length() - 2) == '.') {
-                    number = number.substring(0, number.length() - 2);
-                }
+                number = numbers.get(numbers.size() - 1).toString(); // Double -12.0 -> String "-12.0"
+                number = doSimpleAndOrNegative(number); // -> String "(-12.0)"
                 numbers.remove(numbers.size() - 1);
             }
         }
-        if ( number.matches(".*nfinit.*") ) {
-            number = "";
-            s = "";
-        }
-        if ( !number.endsWith(")") & !s.isEmpty() ) s = s.substring(0, (strRes.length() - 1));
+        if ( !number.equals(s) & !s.isEmpty() ) s = s.substring(0, (strRes.length() - 1));
         return s;
+    }
+
+    private String doSimpleAndOrNegative( String s ) { // number W/O ".0" in the end and/or negative
+        if ( s.endsWith(".0") ) s = s.substring(0, s.length() - 2); // number without ".0" in the end
+        if ( s.startsWith("-") ) s = "(" + s + ")"; // negative number is always inside parentheses
+        return s;
+    }
+
+    private void clearStrResAndNumber() {
+        strRes = "";
+        number = "";
     }
 }
