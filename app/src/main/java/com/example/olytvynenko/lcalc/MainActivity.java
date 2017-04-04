@@ -6,22 +6,31 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
+    private static final String REGEXD = "^[(-]?[0-9]*\\)?(\\.|,)?[0-9]*\\)?([eE][+-]?[0-9]*)?$";
     private TextView tvResult;
+    private String strRes = "";
+    private char ds;
+    private List<Double> numbers = new ArrayList<>();
+    private List<String> actions = new ArrayList<>();
+    private String number = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (getResources().getConfiguration().orientation
-                == Configuration.ORIENTATION_LANDSCAPE) {
+                == Configuration.ORIENTATION_LANDSCAPE & getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        ds = DecimalFormatSymbols.getInstance().getDecimalSeparator();
         tvResult = (TextView) findViewById(R.id.tvResult);
-        tvResult.setText("0");
+        tvResult.setText(strRes.isEmpty() ? "0" : strRes);
 
         findViewById(R.id.btnCancel).setOnClickListener(this);
         findViewById(R.id.btnPercent).setOnClickListener(this);
@@ -45,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btnEquals).setOnClickListener(this);
     }
 
-    private String strRes = "";
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -80,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 strRes = doString('9', strRes);
                 break;
             case R.id.btnDecimalSeparator:
-                strRes = doString('.', strRes);
+                strRes = doString(ds, strRes);
                 break;
             case R.id.btnPlus:
                 strRes = doString('+', strRes);
@@ -96,13 +104,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnEquals:
                 if ( !strRes.isEmpty() && Character.isDigit(strRes.charAt(strRes.length()-1))
-                        | strRes.endsWith(")") || strRes.endsWith(".") ) {
+                        | strRes.endsWith(")") || strRes.endsWith(Character.toString(ds)) ) {
                     if ( !number.isEmpty() ) numbers.add( doNumber(number) );
                     Calculation calculation = new Calculation();
                     strRes = calculation.doCalc(numbers, actions); // numbers.size() should be equals (actions.size()+1)
                     listsClear();
                     strRes = doSimpleAndOrNegative(strRes);
-                    if ( strRes.matches(".*nfinit.*") || strRes.matches("NaN") ) { // division by zero exception Infinity | NaN
+                    if ( strRes.equals("Infinity") ) { // division by zero exception Infinity | NaN
                         strRes = "";
                         Toast.makeText(this, getString(R.string.div_zero), Toast.LENGTH_SHORT).show();
                     }
@@ -124,9 +132,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if ( !numbers.isEmpty() & !number.isEmpty() & !number.endsWith(")") ) {
                     strRes = strRes.substring(0, strRes.length()-number.length());
                     number = doPercent(number);
-                    if ( number.startsWith("-") ) number = "(" + number + ")";
+                    number = doSimpleAndOrNegative(number);
                     if ( "×".equals( actions.get(actions.size()-1) ) ) { // if "×" -> do just (only) percents from previous number
-                        int strResCoeff = numbers.get(numbers.size()-1) > 0 ? 1 : -1;//if numbers.get(numbers.size()-1) is positive "1" : "-1"
+                        int strResCoeff = numbers.get(numbers.size()-1) > 0 ? 1 : -1;//if numbers.get(numbers.size()-1) is positive - "1" : is negative - "-1"
                         strRes = strRes.substring(0, (strRes.length() - numbers.get(numbers.size()-1).toString().length() + strResCoeff));
                         numbers.remove(numbers.size()-1);
                         actions.remove(actions.size()-1);
@@ -140,20 +148,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvResult.setText(strRes.isEmpty() ? "0" : strRes);
     }
 
-    private static final String REGEXD = "^[(-]?[0-9]*\\)?\\.?[0-9]*\\)?([eE][+-]?[0-9]*)?$";
-    private List<Double> numbers = new ArrayList<>();
-    private List<String> actions = new ArrayList<>();
-    private String number = "";
     private String doString(char c, String s) {
         if ( strRes.isEmpty() ) listsClear();
         // condition for the doing number -- method makeNumber
-        if ( Character.isDigit(c) | c == '.' ) {
+        if ( Character.isDigit(c) & number.equals("0") ) {
+            number = Character.toString(c);
+            s = s.substring(0, s.length()-1) + number;
+        } else if ( Character.isDigit(c) | c == ds ) {
             if ( (number + Character.toString(c)).matches(REGEXD) ) {
-                if ( number.isEmpty() & c == '.' ) {
-                    number =  "0.";
-                    s = s + "0.";
-                } else if ( number.equals("0") & Character.isDigit(c)) {// prevent "00" or "02" condition
-                    return s;
+                if ( number.isEmpty() & c == ds ) {
+                    number =  "0" + Character.toString(ds);
+                    s = s + number;
                 } else {
                     number = number + Character.toString(c);
                     s = s + Character.toString(c);
@@ -196,14 +201,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private double doNumber ( String s ) { //String -> double; delete parentheses near the negative number
         double d;
+        s = s.replace(ds,'.');
         d = Double.parseDouble( s.startsWith("(-") ? s.substring(1, s.length()-1) : s );
         return d;
     }
 
     private String doPercent ( String s ) {
-        double d;
-        d = numbers.get(numbers.size() - 1) * doNumber(s) / 100;
-        return String.valueOf(d);
+        return String.valueOf( numbers.get(numbers.size() - 1) * doNumber(s) / 100 );
     }
 
     private String deleteCharacter( String s ) {
@@ -230,8 +234,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private String doSimpleAndOrNegative( String s ) { // number W/O ".0" in the end and/or negative
+        s = s.replace(ds, '.');
         if ( s.endsWith(".0") ) s = s.substring(0, s.length() - 2); // number without ".0" in the end
         if ( s.startsWith("-") ) s = "(" + s + ")"; // negative number is always inside parentheses
+        s = s.replace('.', ds);
         return s;
     }
 
@@ -239,4 +245,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         strRes = "";
         number = "";
     }
+
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("strRes", strRes);
+        outState.putString("number", number);
+        double[] n = new double[numbers.size()];
+        String[] a = new String[actions.size()];
+        for (int i = 0; i < numbers.size(); i++ ) {
+            n[i] = numbers.get(i);
+            if ( i < actions.size() ) a[i] = actions.get(i);
+        }
+        outState.putDoubleArray("numbers", n);
+        outState.putStringArray("actions", a);
+    }
+
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        strRes = savedInstanceState.getString("strRes");
+        if ( strRes != null )  tvResult.setText(strRes.isEmpty() ? "0" : strRes);
+        number = savedInstanceState.getString("number");
+        double[] n = savedInstanceState.getDoubleArray("numbers");
+        String[] a = savedInstanceState.getStringArray("actions");
+        if ( n != null ) {
+            for (int i = 0; i < n.length; i++) {
+                numbers.add(n[i]);
+                if (a != null && i < a.length) actions.add(a[i]);
+            }
+        }
+    }
+
 }
