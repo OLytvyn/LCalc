@@ -12,4 +12,5 @@
     <string name="btn8">восемь</string>
     <string name="btn9">девять</string>
     <string name="div_zero">Деление на ноль невозможно!</string>
+    <string name="maxNumberDigits">Превышено максимальное количество цифр (15)</string>
 </resources>

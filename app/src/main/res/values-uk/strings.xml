@@ -12,4 +12,5 @@
     <string name="btn8">вісім</string>
     <string name="btn9">дев\'ять</string>
     <string name="div_zero">Ділення на нуль неможливе!</string>
+    <string name="maxNumberDigits">\"Перевищена максимальна кількість цифр (15)</string>
 </resources>
