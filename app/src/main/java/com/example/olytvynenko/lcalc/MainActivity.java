@@ -17,7 +17,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private static final String RESTRING = "^[(-]?[0-9]*\\)?(\\.|,)?[0-9]*\\)?([eE][+-]?[0-9]*)?$";
+    private static final String RESTRING = "^[(-]?[0-9]*\\)?([.,])?[0-9]*\\)?([eE][+-]?[0-9]*)?$";
     private static final String REBIGDECIMAL = "^[(-]?[0-9]*\\)?\\.?[0-9]*\\)?([eE][+-]?[0-9]*)?$";
     private TextView tvResult;
     private String strRes = "";
